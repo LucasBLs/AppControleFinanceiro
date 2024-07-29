@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:AppControleFinanceiro.Utils.Converters"
+             x:Class="AppControleFinanceiro.View.TransactionList"
+             Title="Listagem"
+             NavigationPage.HasNavigationBar="False">
+
+    <ContentPage.Resources>
+        <ResourceDictionary Source="/Resources/Styles/Colors.xaml" />
+        <ResourceDictionary>
+            <converters:TransactionValueConverter x:Key="TransactionValueConverter" />
+            <converters:TransactionValueColorConverter x:Key="TransactionValueColorConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <VerticalStackLayout>
+
+        <CollectionView x:Name="CollectionViewTransactions">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="15" ColumnDefinitions="50, *, Auto">
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer CommandParameter="{Binding}" Tapped="TapGestureRecognizer_Tapped_To_TransactionEdit" />
+                        </Grid.GestureRecognizers>
+                        <Label 
+                            Text="S" 
+                            FontSize="20" 
+                            VerticalOptions="Center" 
+                            HorizontalOptions="Center" 
+                            BackgroundColor="White"/>
+
+                        <VerticalStackLayout Grid.Column="1">
+                            <Label Text="{Binding Name}" />
+                            <Label Text="{Binding Date, StringFormat='{0:dd/MM/yyyy}'}" TextColor="#BABABA"/>
+                        </VerticalStackLayout>
+
+                        <Label 
+                            Text="{Binding ., Converter={StaticResource TransactionValueConverter}}" 
+                            TextColor="{Binding ., Converter={StaticResource TransactionValueColorConverter}}" 
+                            Grid.Column="2"
+                            VerticalOptions="Center" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Border 
+            Margin="10" 
+            BackgroundColor="{StaticResource Black}" 
+            Stroke="Transparent"
+            Padding="15"
+            StrokeShape="RoundRectangle 10">
+            <Grid ColumnDefinitions="*, 80" RowDefinitions="Auto, Auto, 30, Auto, Auto">
+                <Label Text="Saldo" FontSize="18" TextColor="#979797" Grid.Row="0" />
+                <Label x:Name="LabelBalance" FontSize="36" TextColor="White" Grid.Row="1" />
+
+                <Button 
+                    Text="+" 
+                    FontSize="40"
+                    WidthRequest="50"
+                    HeightRequest="50"
+                    HorizontalOptions="Center" 
+                    VerticalOptions="Center"
+                    CornerRadius="27"
+                    Clicked="Button_Clicked_To_TransactionAdd"
+                    Grid.Column="1"
+                    Grid.RowSpan="2"/>
+
+                <Label Text="Receita" FontSize="12" TextColor="#979797" Grid.Row="3" Grid.Column="0" />
+                <Label x:Name="LabelIncome" FontSize="15" TextColor="White" Grid.Row="4" Grid.Column="0" />
+
+                <Label Text="Despesas" FontSize="12" TextColor="#979797" Grid.Row="3" Grid.Column="1"/>
+                <Label x:Name="LabelExpense" FontSize="15" TextColor="White" Grid.Row="4" Grid.Column="1" />
+            </Grid>
+        </Border>
+
+    </VerticalStackLayout>
+</ContentPage>
